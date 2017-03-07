@@ -9,36 +9,37 @@ The client is based on a fluent java api that maps the cascade of methods to the
 mvn compile
 ```
 
-## Usage
+## Dependency
 
-First you have to install the maven artifact locally
-
-```shell
-mvn install
-```
-
-Then add the artifact to your dependencies:
+Thank's to [jitpack](https://jitpack.io) it's very to use current builds
 
 ```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
 <dependencies>
-    ...
+    <!-- ... -->
     <dependency>
-        <groupId>io.rocketbase.toggl</groupId>
+        <groupId>com.github.rocketbase-io</groupId>
         <artifactId>toggl-report-api</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${toggl.report.api.version}</version>
     </dependency>
-    ...
 </dependencies>
+
 ```
 
-And then the usage is as follows:
+## Usage
 
 ```java
 public static void main(String[] args) {
     TogglReportApi togglReportApi = new TogglReportApiBuilder()
-                    .setApiToken(System.getenv("api_token"))
-                    .setUserAgent(System.getenv("user_agent"))
-                    .setWorkspaceId(Integer.parseInt(System.getenv("workspace_id")))
+                    .setApiToken(API_TOKEN)
+                    .setUserAgent(USER_AGENT)
+                    .setWorkspaceId(WORKSPACE_ID)
                     .build();
     
     DetailedResult detailedPaginableResult = togglReportApi.detailed()
