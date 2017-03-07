@@ -12,4 +12,20 @@ public class TogglReportApi {
         return new GetDetailed(context);
     }
 
+    public GetWeeklyProjectsEarnings weeklyProjectsEarnings() {
+        return new GetWeeklyProjectsEarnings(context);
+    }
+
+    public GetWeeklyUsersEarnings weeklyUsersEarnings() {
+        return new GetWeeklyUsersEarnings(context);
+    }
+
+    public GetWeeklyProjectsTime weeklyProjectsTime() {
+        return new GetWeeklyProjectsTime(context);
+    }
+
+    public GetWeeklyUsersTime weeklyUsersTime() {
+        return new GetWeeklyUsersTime(context);
+    }
+
 }

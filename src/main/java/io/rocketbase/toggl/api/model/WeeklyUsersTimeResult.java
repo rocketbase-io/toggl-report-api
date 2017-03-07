@@ -2,7 +2,7 @@ package io.rocketbase.toggl.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.rocketbase.toggl.api.model.detailed.TimeEntry;
+import io.rocketbase.toggl.api.model.weekly.WeeklyUsersTimeEntry;
 import lombok.Data;
 
 import java.util.List;
@@ -12,14 +12,11 @@ import java.util.List;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DetailedResult extends BaseResult {
+public class WeeklyUsersTimeResult extends BaseResult {
 
-    private List<TimeEntry> data;
+    @JsonProperty("week_totals")
+    private List<Long> weekTotals;
 
-    @JsonProperty("total_count")
-    private Long totalCount;
-
-    @JsonProperty("per_page")
-    private int perPage;
+    private List<WeeklyUsersTimeEntry> data;
 
 }

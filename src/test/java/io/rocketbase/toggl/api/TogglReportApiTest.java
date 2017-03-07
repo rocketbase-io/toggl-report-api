@@ -1,7 +1,7 @@
 package io.rocketbase.toggl.api;
 
-import io.rocketbase.toggl.api.model.DetailedResult;
-import io.rocketbase.toggl.api.model.TimeEntry;
+import io.rocketbase.toggl.api.model.*;
+import io.rocketbase.toggl.api.model.detailed.TimeEntry;
 import lombok.SneakyThrows;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -19,14 +19,18 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class TogglReportApiTest {
 
-    @SneakyThrows
-    @Test
-    public void simpleTest() {
-        TogglReportApi togglReportApi = new TogglReportApiBuilder()
+    protected TogglReportApi getTogglReportApi() {
+        return new TogglReportApiBuilder()
                 .setApiToken(System.getenv("api_token"))
                 .setUserAgent(System.getenv("user_agent"))
                 .setWorkspaceId(Integer.parseInt(System.getenv("workspace_id")))
                 .build();
+    }
+
+    @SneakyThrows
+    @Test
+    public void detailedReport() {
+        TogglReportApi togglReportApi = getTogglReportApi();
 
         Date start = DateTime.now()
                 .toDate();
@@ -44,6 +48,7 @@ public class TogglReportApiTest {
             detailedPaginableResult = togglReportApi.detailed()
                     .until(start)
                     .since(end)
+                    .billable(Billable.NO)
                     .page(pageStepper.incrementAndGet())
                     .get();
             resultList.addAll(detailedPaginableResult.getData());
@@ -53,9 +58,72 @@ public class TogglReportApiTest {
             }
         } while (pageStepper.get() * perPage < totalCount);
 
-
         assertThat(resultList, notNullValue());
-
-
     }
+
+    @SneakyThrows
+    @Test
+    public void weeklyUsersTime() {
+        TogglReportApi togglReportApi = getTogglReportApi();
+
+        Date start = DateTime.now()
+                .minusDays(14)
+                .toDate();
+
+        WeeklyUsersTimeResult result = togglReportApi.weeklyUsersTime()
+                .since(start)
+                .get();
+
+        assertThat(result, notNullValue());
+    }
+
+    @SneakyThrows
+    @Test
+    public void weeklyProjectsTime() {
+        TogglReportApi togglReportApi = getTogglReportApi();
+
+        Date start = DateTime.now()
+                .minusDays(14)
+                .toDate();
+
+        WeeklyProjectsTimeResult result = togglReportApi.weeklyProjectsTime()
+                .since(start)
+                .get();
+
+        assertThat(result, notNullValue());
+    }
+
+    @SneakyThrows
+    @Test
+    public void weeklyUsersEarnings() {
+        TogglReportApi togglReportApi = getTogglReportApi();
+
+        Date start = DateTime.now()
+                .minusDays(14)
+                .toDate();
+
+        WeeklyUsersEarningsResult result = togglReportApi.weeklyUsersEarnings()
+                .since(start)
+                .get();
+
+        assertThat(result, notNullValue());
+    }
+
+
+    @SneakyThrows
+    @Test
+    public void weeklyProjectsEarnings() {
+        TogglReportApi togglReportApi = getTogglReportApi();
+
+        Date start = DateTime.now()
+                .minusDays(14)
+                .toDate();
+
+        WeeklyProjectsEarningsResult result = togglReportApi.weeklyProjectsEarnings()
+                .since(start)
+                .get();
+
+        assertThat(result, notNullValue());
+    }
+
 }
