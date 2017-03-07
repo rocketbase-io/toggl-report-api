@@ -20,12 +20,22 @@ import static org.hamcrest.Matchers.notNullValue;
 public class TogglReportApiTest {
 
     protected TogglReportApi getTogglReportApi() {
+        String apiToken = "api_token";
+        Long workSpaceId = 0L;
+        try {
+            apiToken = System.getenv("API_TOKEN");
+            workSpaceId = Long.parseLong(System.getenv("WORKSPACE_ID"));
+        } catch (Exception e) {
+            System.err.println("System Env not set use defaults");
+        }
+
         return new TogglReportApiBuilder()
-                .setApiToken(System.getenv("api_token"))
-                .setUserAgent(System.getenv("user_agent"))
-                .setWorkspaceId(Integer.parseInt(System.getenv("workspace_id")))
+                .setApiToken(apiToken)
+                .setUserAgent("java-test")
+                .setWorkspaceId(workSpaceId)
                 .build();
     }
+
 
     @SneakyThrows
     @Test
