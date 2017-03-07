@@ -11,8 +11,9 @@ mvn compile
 
 ## Dependency
 
-Thank's to [jitpack](https://jitpack.io) it's very to use current builds
+Thank's to [jitpack](https://jitpack.io/#rocketbase-io/toggl-report-api) it's very easy to use current builds
 
+Step 1. Add the JitPack repository to your build file
 ```xml
 <repositories>
     <repository>
@@ -20,16 +21,14 @@ Thank's to [jitpack](https://jitpack.io) it's very to use current builds
         <url>https://jitpack.io</url>
     </repository>
 </repositories>
-
-<dependencies>
-    <!-- ... -->
-    <dependency>
-        <groupId>com.github.rocketbase-io</groupId>
-        <artifactId>toggl-report-api</artifactId>
-        <version>${toggl.report.api.version}</version>
-    </dependency>
-</dependencies>
-
+```
+Step 2. Add the dependency
+```xml
+<dependency>
+    <groupId>com.github.rocketbase-io</groupId>
+    <artifactId>toggl-report-api</artifactId>
+    <version>toggl-report-api-1.0.0</version>
+</dependency>
 ```
 
 ## Usage
@@ -42,15 +41,16 @@ public static void main(String[] args) {
                     .setWorkspaceId(WORKSPACE_ID)
                     .build();
     
-    DetailedResult detailedPaginableResult = togglReportApi.detailed()
-                        .until(start)
-                        .since(end)
-                        .page(pageStepper.incrementAndGet())
-                        .get();
+    WeeklyUsersTimeResult result = togglReportApi.weeklyUsersTime()
+                    .since(start)
+                    .get();
     
-    System.out.println(detailedPaginableResult);
+    System.out.println(result);
 }
 ```
+
+Very short examples your can also find within the tests [goto tests](https://github.com/rocketbase-io/toggl-report-api/blob/master/src/test/java/io/rocketbase/toggl/api/TogglReportApiTest.java)
+
 
 To use this client in a Spring application consider the following setup:
 
