@@ -33,12 +33,15 @@ Step 2. Add the dependency
 
 ## Usage
 
+Very short examples you can also find within the tests [goto tests](https://github.com/rocketbase-io/toggl-report-api/blob/master/src/test/java/io/rocketbase/toggl/api/TogglReportApiTest.java)
+
+### simply get it running
 ```java
 public static void main(String[] args) {
     TogglReportApi togglReportApi = new TogglReportApiBuilder()
-                    .setApiToken(API_TOKEN)
-                    .setUserAgent(USER_AGENT)
-                    .setWorkspaceId(WORKSPACE_ID)
+                    .apiToken(API_TOKEN)
+                    .userAgent(USER_AGENT)
+                    .workspaceId(WORKSPACE_ID)
                     .build();
     
     WeeklyUsersTimeResult result = togglReportApi.weeklyUsersTime()
@@ -49,8 +52,18 @@ public static void main(String[] args) {
 }
 ```
 
-Very short examples your can also find within the tests [goto tests](https://github.com/rocketbase-io/toggl-report-api/blob/master/src/test/java/io/rocketbase/toggl/api/TogglReportApiTest.java)
+### FetchAllDetailed 
+Fetch full list of all Detailed Results. The FetchAllDetailed cares about paging
 
+```java
+List<TimeEntry> resultList = FetchAllDetailed.getAll(togglReportApi.detailed()
+        .until(start)
+        .since(end)
+        .billable(Billable.BOTH));
+```
+
+
+### Spring Context
 
 To use this client in a Spring application consider the following setup:
 
