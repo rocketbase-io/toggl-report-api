@@ -1,9 +1,7 @@
 package io.rocketbase.toggl.api;
 
+import lombok.SneakyThrows;
 import org.springframework.core.ParameterizedTypeReference;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 class ExecutableRequestChain<E> extends RequestChain {
 
@@ -28,7 +26,8 @@ class ExecutableRequestChain<E> extends RequestChain {
         return this.uriBuilder;
     }
 
-    public E get() throws IOException, URISyntaxException {
+    @SneakyThrows
+    public E get() {
         return getContext().execute(uriBuilder, entityClass);
     }
 }

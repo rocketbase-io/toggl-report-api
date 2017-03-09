@@ -1,15 +1,13 @@
 package io.rocketbase.toggl.api;
 
 import io.rocketbase.toggl.api.model.*;
-import io.rocketbase.toggl.api.model.detailed.TimeEntry;
+import io.rocketbase.toggl.api.util.FetchAllDetailed;
 import lombok.SneakyThrows;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -30,9 +28,9 @@ public class TogglReportApiTest {
         }
 
         return new TogglReportApiBuilder()
-                .setApiToken(apiToken)
-                .setUserAgent("java-test")
-                .setWorkspaceId(workSpaceId)
+                .apiToken(apiToken)
+                .userAgent("java-test")
+                .workspaceId(workSpaceId)
                 .build();
     }
 
@@ -45,28 +43,13 @@ public class TogglReportApiTest {
         Date start = DateTime.now()
                 .toDate();
         Date end = DateTime.now()
-                .minusDays(10)
+                .minusDays(20)
                 .toDate();
 
-        DetailedResult detailedPaginableResult;
-        List<TimeEntry> resultList = new ArrayList<>();
-
-        int perPage = 50;
-        int totalCount = 0;
-        AtomicInteger pageStepper = new AtomicInteger();
-        do {
-            detailedPaginableResult = togglReportApi.detailed()
-                    .until(start)
-                    .since(end)
-                    .billable(Billable.NO)
-                    .page(pageStepper.incrementAndGet())
-                    .get();
-            resultList.addAll(detailedPaginableResult.getData());
-            if (detailedPaginableResult.getTotalCount() != null) {
-                totalCount = detailedPaginableResult.getTotalCount()
-                        .intValue();
-            }
-        } while (pageStepper.get() * perPage < totalCount);
+        List<TimeEntry> resultList = FetchAllDetailed.getAll(togglReportApi.detailed()
+                .until(start)
+                .since(end)
+                .billable(Billable.BOTH));
 
         assertThat(resultList, notNullValue());
     }

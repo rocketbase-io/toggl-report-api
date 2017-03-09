@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WeeklyUsersTimeEntry implements TimeEntry {
+public class WeeklyUsersTimeEntry implements WeeklyTimeEntry {
 
     @JsonProperty("title")
     private User title;

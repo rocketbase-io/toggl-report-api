@@ -4,7 +4,7 @@ public class TogglReportApi {
 
     private final RequestContext context;
 
-    public TogglReportApi(RequestContext context) {
+    TogglReportApi(RequestContext context) {
         this.context = context;
     }
 

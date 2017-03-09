@@ -1,4 +1,4 @@
-package io.rocketbase.toggl.api.model.detailed;
+package io.rocketbase.toggl.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -9,7 +9,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,30 +18,24 @@ import java.util.Arrays;
 
 public class RequestContext {
 
-    private final String host;
-    private final HttpClient httpClient;
-    private final ClientHttpRequestFactory requestFactory;
-    private final RestTemplate restTemplate;
-
+    private static long lastCall;
+    private final TogglReportApiBuilder apiBuilder;
+    private HttpClient httpClient;
+    private ClientHttpRequestFactory requestFactory;
+    private RestTemplate restTemplate;
     private String basicAuth = null;
-    private String apiToken = null;
-    private String userAgent = null;
-    private Long workspaceId = null;
+    private long throttlePeriod = 1100;
 
-    private long throttlePeriod = 1000;
-    private long lastCall;
+    RequestContext(TogglReportApiBuilder apiBuilder) {
+        this.apiBuilder = apiBuilder;
 
-    public RequestContext(String host, String apiToken, String userAgent, long workspaceId) {
-        this.host = host;
-        this.apiToken = apiToken;
-        this.userAgent = userAgent;
-        this.workspaceId = workspaceId;
         this.httpClient = HttpClientBuilder.create()
                 .build();
         this.requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         restTemplate = new RestTemplate(requestFactory);
-        restTemplate.setMessageConverters(Arrays.<HttpMessageConverter<?>>asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
+        restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter(getObjectMapper())));
     }
+
 
     protected ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
@@ -52,7 +45,7 @@ public class RequestContext {
 
     protected String getBasicAuth() {
         if (basicAuth == null) {
-            String auth = apiToken + ":api_token";
+            String auth = apiBuilder.getApiToken() + ":api_token";
             basicAuth = new String(Base64.encodeBase64(auth.getBytes()));
         }
         return basicAuth;
@@ -61,7 +54,7 @@ public class RequestContext {
     public RestUriBuilder getUriBuilder() {
         return new RestUriBuilder()
                 .protocol("https")
-                .host(host);
+                .host(apiBuilder.getHost());
     }
 
     public synchronized <E> E execute(RestUriBuilder uriBuilder, ParameterizedTypeReference<E> entityClass) throws IOException, URISyntaxException {
@@ -70,21 +63,41 @@ public class RequestContext {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.add("Authorization", "Basic " + getBasicAuth());
 
-        uriBuilder.addParameter("user_agent", userAgent);
-        uriBuilder.addParameter("workspace_id", workspaceId);
+        uriBuilder.addParameter("user_agent", apiBuilder.getUserAgent());
+
+        if (apiBuilder.workspaceProviderPresent()) {
+            uriBuilder.addParameter("workspace_id",
+                    apiBuilder.getWorkspaceProvider()
+                            .getWorkspaceId());
+        } else {
+            uriBuilder.addParameter("workspace_id", apiBuilder.getWorkspaceId());
+        }
 
         checkThrottlePeriod();
 
         HttpEntity<E> httpEntity = new HttpEntity<E>(headers);
         ResponseEntity<E> response = restTemplate.exchange(uriBuilder.build(), HttpMethod.GET, httpEntity, entityClass);
-
         lastCall = System.currentTimeMillis();
+        if (apiBuilder.throttleProviderPresent()) {
+            apiBuilder.getThrottleProvider()
+                    .apiCalled();
+        }
+
 
         return response.getBody();
     }
 
     protected synchronized void checkThrottlePeriod() {
-        while (lastCall + throttlePeriod > System.currentTimeMillis()) {
+        if (apiBuilder.throttleProviderPresent()) {
+            waitFuturePassed(apiBuilder.getThrottleProvider()
+                    .getNextCallAllowed());
+        } else {
+            waitFuturePassed(lastCall + throttlePeriod);
+        }
+    }
+
+    protected synchronized void waitFuturePassed(long future) {
+        while (future > System.currentTimeMillis()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

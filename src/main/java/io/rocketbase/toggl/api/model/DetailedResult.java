@@ -2,7 +2,6 @@ package io.rocketbase.toggl.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.rocketbase.toggl.api.model.detailed.TimeEntry;
 import lombok.Data;
 
 import java.util.List;
