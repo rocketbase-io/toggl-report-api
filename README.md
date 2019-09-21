@@ -87,15 +87,15 @@ public class TogglReportApiConfiguration {
 
 ## Dependencies
 
-This API depends on three other popular modules:
+This API depends on these other popular modules (versions of spring-boot bom 2.1.8.RELEASE):
 
-* `org.springframework` artifact `spring-web` version `4.3.5.RELEASE`
+* `org.springframework` artifact `spring-web` version `5.1.9.RELEASE`
 
-* `com.google.guava` artifact `guava` version `21.0`
+* `com.google.guava` artifact `guava` version `28.1-jre`
 
-* `com.fasterxml.jackson.core` artifact `jackson-databind` version `2.8.6`
+* `com.fasterxml.jackson.core` artifact `jackson-databind` version `2.9.9.3`
 
-* `org.apache.httpcomponents` artifact `httpclient` version `4.6`
+* `org.apache.httpcomponents` artifact `httpclient` version `4.5.9`
 
 Since all these artifacts are pretty popular take with care the possible artifact's version conflicts. If you are going
  to use this software under an Android device consider the [httpclient issues](https://hc.apache.org/httpcomponents-client-4.3.x/android-port.html).
