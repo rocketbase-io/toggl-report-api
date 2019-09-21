@@ -3,10 +3,9 @@ package io.rocketbase.toggl.api;
 import io.rocketbase.toggl.api.model.*;
 import io.rocketbase.toggl.api.util.FetchAllDetailed;
 import lombok.SneakyThrows;
-import org.joda.time.DateTime;
 import org.junit.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,15 +39,10 @@ public class TogglReportApiTest {
     public void detailedReport() {
         TogglReportApi togglReportApi = getTogglReportApi();
 
-        Date start = DateTime.now()
-                .toDate();
-        Date end = DateTime.now()
-                .minusDays(20)
-                .toDate();
 
         List<TimeEntry> resultList = FetchAllDetailed.getAll(togglReportApi.detailed()
-                .until(start)
-                .since(end)
+                .until(LocalDateTime.now())
+                .since(LocalDateTime.now().minusDays(20))
                 .billable(Billable.BOTH));
 
         assertThat(resultList, notNullValue());
@@ -59,12 +53,9 @@ public class TogglReportApiTest {
     public void weeklyUsersTime() {
         TogglReportApi togglReportApi = getTogglReportApi();
 
-        Date start = DateTime.now()
-                .minusDays(14)
-                .toDate();
 
         WeeklyUsersTimeResult result = togglReportApi.weeklyUsersTime()
-                .since(start)
+                .since(LocalDateTime.now().minusDays(14))
                 .get();
 
         assertThat(result, notNullValue());
@@ -75,12 +66,8 @@ public class TogglReportApiTest {
     public void weeklyProjectsTime() {
         TogglReportApi togglReportApi = getTogglReportApi();
 
-        Date start = DateTime.now()
-                .minusDays(14)
-                .toDate();
-
         WeeklyProjectsTimeResult result = togglReportApi.weeklyProjectsTime()
-                .since(start)
+                .since(LocalDateTime.now().minusDays(14))
                 .get();
 
         assertThat(result, notNullValue());
@@ -91,12 +78,9 @@ public class TogglReportApiTest {
     public void weeklyUsersEarnings() {
         TogglReportApi togglReportApi = getTogglReportApi();
 
-        Date start = DateTime.now()
-                .minusDays(14)
-                .toDate();
 
         WeeklyUsersEarningsResult result = togglReportApi.weeklyUsersEarnings()
-                .since(start)
+                .since(LocalDateTime.now().minusDays(14))
                 .get();
 
         assertThat(result, notNullValue());
@@ -108,12 +92,8 @@ public class TogglReportApiTest {
     public void weeklyProjectsEarnings() {
         TogglReportApi togglReportApi = getTogglReportApi();
 
-        Date start = DateTime.now()
-                .minusDays(14)
-                .toDate();
-
         WeeklyProjectsEarningsResult result = togglReportApi.weeklyProjectsEarnings()
-                .since(start)
+                .since(LocalDateTime.now().minusDays(14))
                 .get();
 
         assertThat(result, notNullValue());

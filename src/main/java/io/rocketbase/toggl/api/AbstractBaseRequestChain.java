@@ -6,6 +6,8 @@ import io.rocketbase.toggl.api.model.DisplayHours;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestChain<R> {
 
     protected static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    protected static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
     protected final String path;
 
     public AbstractBaseRequestChain(RequestContext context, String path, ParameterizedTypeReference<R> typeReference) {
@@ -29,12 +33,27 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
         return (T) this;
     }
 
+    public T since(LocalDateTime since) {
+        super.getUriBuilder()
+                .addParameter("since", since.format(DATE_TIME_FORMATTER));
+        return (T) this;
+    }
+
     /**
      * not allowed in weekly report use since for 7 days starting from...
      */
     public T until(Date until) {
         super.getUriBuilder()
                 .addParameter("until", DATE_FORMAT.format(until));
+        return (T) this;
+    }
+
+    /**
+     * not allowed in weekly report use since for 7 days starting from...
+     */
+    public T until(LocalDateTime until) {
+        super.getUriBuilder()
+                .addParameter("until", until.format(DATE_TIME_FORMATTER));
         return (T) this;
     }
 

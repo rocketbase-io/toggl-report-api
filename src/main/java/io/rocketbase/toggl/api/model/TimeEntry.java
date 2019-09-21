@@ -3,7 +3,6 @@ package io.rocketbase.toggl.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,11 +25,11 @@ public class TimeEntry implements Serializable {
 
     private String description;
 
-    private DateTime start;
+    private Date start;
 
-    private DateTime end;
+    private Date end;
 
-    private DateTime updated;
+    private Date updated;
 
     /**
      * duration in milliseconds

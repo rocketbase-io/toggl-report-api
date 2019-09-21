@@ -1,7 +1,6 @@
 package io.rocketbase.toggl.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -39,7 +38,6 @@ public class RequestContext {
 
     protected ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JodaModule());
         return mapper;
     }
 
