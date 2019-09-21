@@ -27,7 +27,7 @@ Step 2. Add the dependency
 <dependency>
     <groupId>com.github.rocketbase-io</groupId>
     <artifactId>toggl-report-api</artifactId>
-    <version>toggl-report-api-1.0.0</version>
+    <version>toggl-report-api-1.1.0</version>
 </dependency>
 ```
 
