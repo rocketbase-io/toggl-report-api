@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter(AccessLevel.PACKAGE)
 public class TogglReportApiBuilder {
 
-    public static final String TOGGLE_REPORT_API = "toggl.com/reports/api/v2";
+    public static final String TOGGLE_REPORT_API = "api.track.toggl.com/reports/api/v2";
 
     private String host = TOGGLE_REPORT_API;
     private String apiToken = null;
