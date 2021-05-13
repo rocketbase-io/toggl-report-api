@@ -3,7 +3,7 @@ package io.rocketbase.toggl.report;
 import io.rocketbase.toggl.report.model.*;
 import io.rocketbase.toggl.report.util.FetchAllDetailed;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,7 +42,7 @@ public class TogglReportApiTest {
 
         List<TimeEntry> resultList = FetchAllDetailed.getAll(togglReportApi.detailed()
                 .until(LocalDateTime.now())
-                .since(LocalDateTime.now().minusDays(20))
+                .since(LocalDateTime.now().minusDays(14))
                 .billable(Billable.BOTH));
 
         assertThat(resultList, notNullValue());
