@@ -1,6 +1,5 @@
 package io.rocketbase.toggl.report;
 
-import com.google.common.base.Joiner;
 import io.rocketbase.toggl.report.model.Billable;
 import io.rocketbase.toggl.report.model.DisplayHours;
 import org.springframework.core.ParameterizedTypeReference;
@@ -75,9 +74,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T clientIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("client_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -91,9 +88,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T projectIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("project_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -104,9 +99,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T userIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("user_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -120,9 +113,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T membersOfGroupIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("members_of_group_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -136,9 +127,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T orMembersOfGroupIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("or_members_of_group_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -152,9 +141,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T tagIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("tag_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -168,9 +155,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T taskIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("task_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 
@@ -181,9 +166,7 @@ public abstract class AbstractBaseRequestChain<T, R> extends ExecutableRequestCh
     public T timeEntryIds(List<String> ids) {
         super.getUriBuilder()
                 .addParameter("time_entry_ids",
-                        Joiner.on(",")
-                                .skipNulls()
-                                .join(ids));
+                        String.join(",", ids));
         return (T) this;
     }
 

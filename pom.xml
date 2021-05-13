@@ -27,7 +27,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <spring-boot.version>2.4.5</spring-boot.version>
-        <guava.version>30.1.1-jre</guava.version>
     </properties>
 
     <scm>
@@ -52,11 +51,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

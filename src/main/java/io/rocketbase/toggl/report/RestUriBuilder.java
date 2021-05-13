@@ -1,10 +1,6 @@
 package io.rocketbase.toggl.report;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 
@@ -13,29 +9,29 @@ public class RestUriBuilder {
     private String host;
     private String protocol = "https";
     private StringBuilder path;
-    private Map<String, List<String>> parameters = new HashMap<String, List<String>>();
+    private Map<String, Collection> parameters = new HashMap<>();
 
     public RestUriBuilder host(String host) {
-        Preconditions.checkNotNull(host);
+        Objects.nonNull(host);
         this.host = host;
         return this;
     }
 
     public RestUriBuilder protocol(String protocol) {
-        Preconditions.checkNotNull(protocol);
+        Objects.nonNull(protocol);
         this.protocol = protocol;
         return this;
     }
 
     public RestUriBuilder path(String path) {
-        Preconditions.checkNotNull(path);
+        Objects.nonNull(path);
         this.path = new StringBuilder();
         this.path.append(path);
         return this;
     }
 
     public RestUriBuilder appendPath(String path) {
-        Preconditions.checkNotNull(path);
+        Objects.nonNull(path);
         this.path.append(path);
         return this;
     }
@@ -44,40 +40,21 @@ public class RestUriBuilder {
         return addParameters(key, Collections.singletonList(value));
     }
 
-    public RestUriBuilder addParameters(String key, Collection<?> value) {
-        Preconditions.checkNotNull(key);
-        Preconditions.checkNotNull(value);
-        Iterable<String> stringValues = Iterables.transform(value, new Function<Object, String>() {
-            public String apply(Object o) {
-                return String.valueOf(o);
-            }
-        });
-        this.parameters.put(key, Lists.newArrayList(stringValues));
+    public RestUriBuilder addParameters(String key, Collection<? extends Object> value) {
+        Objects.nonNull(key);
+        Objects.nonNull(value);
+        this.parameters.putIfAbsent(key, new ArrayList<>());
+        this.parameters.get(key).addAll(value);
         return this;
     }
 
     public String build() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(protocol);
-        builder.append("://");
-        Preconditions.checkNotNull(host);
-        Preconditions.checkNotNull(path);
-        builder.append(host);
-        builder.append(path);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(protocol + "://" + host + path);
         if (!parameters.isEmpty()) {
-            builder.append("?");
-            Joiner.on("&")
-                    .appendTo(builder, Iterables.transform(parameters.entrySet(), new Function<Map.Entry<String, List<String>>, String>() {
-                        public String apply(final Map.Entry<String, List<String>> stringStringEntry) {
-                            return Joiner.on("&")
-                                    .join(Lists.transform(stringStringEntry.getValue(), new Function<String, String>() {
-                                        public String apply(String s) {
-                                            return stringStringEntry.getKey() + "=" + s;
-                                        }
-                                    }));
-                        }
-                    }));
+            for (Map.Entry<String, Collection> entry : parameters.entrySet()) {
+                builder.queryParam(entry.getKey(), entry.getValue());
+            }
         }
-        return builder.toString();
+        return builder.toUriString();
     }
 }
