@@ -25,6 +25,11 @@ public class TogglReportApiBuilder {
         return this;
     }
 
+    public TogglReportApiBuilder host(String host) {
+        this.host = host;
+        return this;
+    }
+
     /**
      * simple way to fix workspace
      *
