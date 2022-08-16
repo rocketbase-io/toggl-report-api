@@ -23,7 +23,7 @@ public class RequestContext {
     private ClientHttpRequestFactory requestFactory;
     private RestTemplate restTemplate;
     private String basicAuth = null;
-    private long throttlePeriod = 1100;
+    private long throttlePeriod = 1010;
 
     RequestContext(TogglReportApiBuilder apiBuilder) {
         this.apiBuilder = apiBuilder;
